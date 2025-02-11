@@ -1,0 +1,17 @@
+fastapi>=0.68.0
+uvicorn>=0.15.0
+pydantic>=1.8.0
+PyYAML>=5.4.1
+redis>=4.0.0
+loguru>=0.5.3
+requests>=2.26.0
+python-multipart>=0.0.5
+aiofiles>=0.7.0
+numpy>=1.19.5
+pandas>=1.3.0
+eclipse-sumo>=1.18.0
+shapely>=2.0.0
+hydra-core>=1.3.0
+# Add your project packages
+-e ./src/TeraSim
+-e ./src/TeraSim-NDE-ITE 

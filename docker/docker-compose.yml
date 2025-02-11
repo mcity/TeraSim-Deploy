@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  terasim:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - type: bind
+        source: ../maps
+        target: /app/maps
+      - type: bind
+        source: ../config
+        target: /app/config
+      - type: bind
+        source: ../output
+        target: /app/output
+      - type: bind
+        source: ../logs
+        target: /app/logs
+    environment:
+      - REDIS_HOST=redis
+      - PYTHONPATH=/app/src:/app/src/TeraSim:/app/src/TeraSim-NDE-ITE:/app/src/TeraSim-Service
+      - PYTHON_UNBUFFERED=1
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:
+    driver: local 
