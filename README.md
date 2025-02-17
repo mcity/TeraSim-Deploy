@@ -1,101 +1,159 @@
-# TeraSim Simulation Platform
+# TeraSim Deploy
 
-TeraSim is a powerful simulation platform for autonomous driving scenarios, providing a comprehensive environment for testing and validation.
+<div align="center">
+<p align="center">
 
-## System Requirements
+<img src="docs/figure/terasim_deploy.svg" height="200px">
+
+</p>
+</div>
+
+TeraSim Deploy provides containerized deployment solutions for the TeraSim autonomous driving simulation platform. This repository orchestrates the deployment of various TeraSim components using Docker and Kubernetes, enabling seamless integration and scalable deployment.
+
+## Components
+
+TeraSim Deploy integrates the following components:
+- `terasim`: Core simulation engine
+- `terasim_nde_nade`: Neural differential equations component
+- `terasim_service`: HTTP service interface for I/O operations
+- `terasim_macro`: Macro-level simulation capabilities
+- `terasim_data_zoo`: Data management and dataset utilities
+- `terasim_gpt`: GPT-based simulation enhancement
+
+## Prerequisites
 
 - Docker >= 20.10
 - Docker Compose >= 2.0
-- 8GB+ RAM
-- 20GB+ free disk space
-- Linux/macOS/Windows with WSL2
+- Kubernetes >= 1.20 (for K8s deployment)
+- Helm >= 3.0 (for K8s deployment)
+- 16GB+ RAM recommended
+- 50GB+ free disk space
 
-## Quick Start
+## Quick Start with Docker
 
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd terasim-package
+cd terasim-deploy
 ```
 
-2. Make scripts executable:
+2. Configure environment:
 ```bash
-chmod +x scripts/*.sh
+cp .env.example .env
+# Edit .env file with your configuration
 ```
 
-3. Start the service:
+3. Start the services:
 ```bash
-./scripts/start.sh
+# For development environment
+docker compose -f docker/docker-compose.dev.yml up -d
+
+# For production environment
+docker compose -f docker/docker-compose.prod.yml up -d
 ```
 
-4. Stop the service:
+4. Verify deployment:
 ```bash
-./scripts/stop.sh
+curl http://localhost:8000/health
+```
+
+## Kubernetes Deployment
+
+1. Add TeraSim Helm repository:
+```bash
+helm repo add terasim https://charts.terasim.com
+helm repo update
+```
+
+2. Install using Helm:
+```bash
+# For development environment
+helm install terasim-dev terasim/terasim-deploy -f values.dev.yaml
+
+# For production environment
+helm install terasim-prod terasim/terasim-deploy -f values.prod.yaml
 ```
 
 ## Directory Structure
 
 ```
-terasim-package/
-├── docker/             # Docker configuration files
-├── config/             # Configuration files
-├── maps/               # Simulation maps
-├── scripts/            # Utility scripts
-├── src/               # Source code
-├── output/            # Simulation output
-└── logs/              # Log files
-```
-
-## API Usage
-
-### Python Example
-```python
-import requests
-
-# Start a simulation
-response = requests.post('http://localhost:8000/start_simulation', 
-    json={
-        "config_file": "/app/config/simulation_config.yaml",
-        "auto_run": True
-    })
-
-simulation_id = response.json()['simulation_id']
-
-# Get simulation status
-status = requests.get(f'http://localhost:8000/simulation_status/{simulation_id}')
-
-# Control vehicles
-requests.post(f'http://localhost:8000/simulation/{simulation_id}/vehicle_command',
-    json={
-        "vehicle_id": "ego",
-        "type": "set_state",
-        "speed": 30.0
-    })
+terasim-deploy/
+├── docker/                 # Docker configuration
+│   ├── Dockerfile.*       # Component-specific Dockerfiles
+│   └── docker-compose.*   # Environment-specific compose files
+├── k8s/                   # Kubernetes configuration
+│   ├── charts/           # Helm charts
+│   └── manifests/        # K8s manifests
+├── config/                # Configuration files
+│   ├── dev/              # Development configs
+│   └── prod/             # Production configs
+├── scripts/               # Utility scripts
+└── docs/                  # Documentation
 ```
 
 ## Configuration
 
-The main configuration file is located at `config/simulation_config.yaml`. Key configuration options:
+### Docker Environment Variables
 
-- `output`: Output directory settings
-- `environment`: Simulation environment configuration
-- `simulator`: Simulator parameters
-- `file_paths`: Map and configuration file paths
-- `logging`: Logging settings
+Key configuration options in `.env`:
+- `TERASIM_VERSION`: Version of TeraSim components
+- `SERVICE_PORT`: HTTP service port (default: 8000)
+- `REDIS_URL`: Redis connection string
+- `LOG_LEVEL`: Logging level
+
+### Kubernetes Configuration
+
+Key configuration options in `values.yaml`:
+- `global.environment`: Deployment environment
+- `components`: Component-specific settings
+- `resources`: Resource allocation
+- `persistence`: Storage configuration
+
+## Health Monitoring
+
+- Docker: `http://localhost:8000/health`
+- Kubernetes: `http://terasim-service.namespace/health`
+
+## Scaling
+
+### Docker Compose
+
+```bash
+docker compose -f docker/docker-compose.prod.yml up -d --scale terasim_service=3
+```
+
+### Kubernetes
+
+```bash
+kubectl scale deployment terasim-service --replicas=3
+```
 
 ## Troubleshooting
 
-1. Service fails to start:
-   - Check Docker logs: `docker-compose -f docker/docker-compose.yml logs`
-   - Verify port 8000 is not in use
-   - Ensure Redis is running: `docker ps | grep redis`
+1. Component startup issues:
+   ```bash
+   # Check Docker logs
+   docker compose logs [service-name]
+   
+   # Check K8s logs
+   kubectl logs -l app=terasim-service
+   ```
 
-2. Cannot connect to API:
-   - Verify service is running: `curl http://localhost:8000/health`
-   - Check firewall settings
+2. Resource constraints:
+   - Verify resource allocation in Docker Compose or K8s manifests
+   - Check node capacity in K8s cluster
+
+3. Networking issues:
+   - Verify service discovery configuration
+   - Check network policies and security groups
 
 ## Support
 
-For technical support or bug reports, please contact:
+For deployment-related issues:
+- GitHub Issues: <repository-url>/issues
+- Documentation: <docs-url>
 - Email: support@terasim.com
-- Issue Tracker: <repository-url>/issues 
+
+## License
+
+[License Type] - See LICENSE file for details 
