@@ -1,39 +1,46 @@
-version: '3'
+version: '3.8'
 
 services:
-  terasim:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
+  terasim_service:
+    image: terasim_service:${VERSION:-latest}
     ports:
       - "8000:8000"
-    volumes:
-      - type: bind
-        source: ../maps
-        target: /app/maps
-      - type: bind
-        source: ../config
-        target: /app/config
-      - type: bind
-        source: ../output
-        target: /app/output
-      - type: bind
-        source: ../logs
-        target: /app/logs
     environment:
-      - REDIS_HOST=redis
-      - PYTHONPATH=/app/src:/app/src/TeraSim:/app/src/TeraSim-NDE-ITE:/app/src/TeraSim-Service
-      - PYTHON_UNBUFFERED=1
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ./config:/app/config
     depends_on:
       - redis
 
+  terasim_nde_nade:
+    image: terasim_nde_nade:${VERSION:-latest}
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ./config:/app/config
+
   redis:
-    image: redis:latest
+    image: redis:7.0-alpine
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
 
 volumes:
-  redis_data:
-    driver: local 
+  redis_data: 
