@@ -1,5 +1,5 @@
 # Build arguments
-ARG BASE_IMAGE=terasim_base
+ARG BASE_IMAGE=terasim_nde_nade
 ARG VERSION=latest
 ARG VARIANT=cpu
 
@@ -7,16 +7,18 @@ ARG VARIANT=cpu
 FROM ${BASE_IMAGE}:${VERSION}-${VARIANT}
 
 # Copy TeraSim-Service package
-COPY TeraSim-Service/terasim_service /app/terasim_service
-COPY TeraSim-Service/pyproject.toml TeraSim-Service/poetry.lock /app/
+USER root
+COPY TeraSim-Service /app/TeraSim-Service
+RUN chown -R terasim:terasim /app/TeraSim-Service
 
-# Install poetry if not already installed
-RUN pip install --no-cache-dir poetry
+# Install TeraSim-Service package
+USER root
+WORKDIR /app/TeraSim-Service
+RUN rm -rf poetry.lock
+RUN poetry install
 
-# Install package
-WORKDIR /app
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-dev --no-interaction --no-ansi
+# Install Redis
+RUN apt-get update && apt-get install -y redis
 
 # Expose service port
 EXPOSE 8000
@@ -25,4 +27,8 @@ EXPOSE 8000
 ENV PYTHONPATH=/app:${PYTHONPATH}
 
 # Set the default command
-CMD ["python", "-m", "terasim_service.main"] 
+USER terasim
+
+WORKDIR /app/TeraSim-Service
+
+CMD ["bash", "examples/main.sh"]

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define variables
-DOCKER_BASE_DIR="docker/base"
-DOCKER_COMPONENTS_DIR="docker/components"
+DOCKER_BASE_DIR="TeraSim-Deploy/docker/base"
+DOCKER_COMPONENTS_DIR="TeraSim-Deploy/docker/components"
 VERSION="1.0.0"
 CUDA_VERSION="12.1.1"
 
@@ -50,11 +50,15 @@ fi
 
 # Build base image
 VARIANT=$([ "$USE_GPU" = true ] && echo "gpu" || echo "cpu")
-BASE_TAG="terasim_base:${VERSION}-${VARIANT}"
+BASE_TAG="terasim_base"
+CORE_TAG="terasim_core"
+NADE_TAG="terasim_nde_nade"
+SERVICE_TAG="terasim_service"
+
 
 echo "Building ${VARIANT} version of base image..."
 docker build -f ${DOCKER_BASE_DIR}/Dockerfile.base.${VARIANT} \
-    -t ${BASE_TAG} \
+    -t ${BASE_TAG}:${VERSION}-${VARIANT} \
     --build-arg CUDA_VERSION=${CUDA_VERSION} \
     ${DOCKER_BASE_DIR}
 
@@ -67,22 +71,22 @@ if contains "${COMPONENTS[@]}" "terasim_nde_nade" || \
     
     echo "Building terasim (core) image..."
     docker build -f ${DOCKER_COMPONENTS_DIR}/terasim/Dockerfile \
-        -t terasim:${VERSION} \
-        --build-arg BASE_IMAGE=terasim_base \
+        -t ${CORE_TAG}:${VERSION}-${VARIANT} \
+        --build-arg BASE_IMAGE=${BASE_TAG} \
         --build-arg VERSION=${VERSION} \
         --build-arg VARIANT=${VARIANT} \
-        ${DOCKER_COMPONENTS_DIR}/terasim
+        .
 fi
 
 # Build NDE-NADE if requested (high priority)
 if contains "${COMPONENTS[@]}" "terasim_nde_nade"; then
     echo "Building terasim_nde_nade image..."
     docker build -f ${DOCKER_COMPONENTS_DIR}/terasim_nde_nade/Dockerfile \
-        -t terasim_nde_nade:${VERSION} \
-        --build-arg BASE_IMAGE=terasim_base \
+        -t ${NADE_TAG}:${VERSION}-${VARIANT} \
+        --build-arg BASE_IMAGE=${CORE_TAG} \
         --build-arg VERSION=${VERSION} \
         --build-arg VARIANT=${VARIANT} \
-        ${DOCKER_COMPONENTS_DIR}/terasim_nde_nade
+        .
 fi
 
 # Build other components if requested
@@ -90,10 +94,10 @@ for comp in "terasim_data_zoo" "terasim_gpt" "terasim_service"; do
     if contains "${COMPONENTS[@]}" "${comp}"; then
         echo "Building ${comp} image..."
         docker build -f ${DOCKER_COMPONENTS_DIR}/${comp}/Dockerfile \
-            -t ${comp}:${VERSION} \
-            --build-arg BASE_IMAGE=terasim_base \
+            -t ${comp}:${VERSION}-${VARIANT} \
+            --build-arg BASE_IMAGE=${NADE_TAG} \
             --build-arg VERSION=${VERSION} \
             --build-arg VARIANT=${VARIANT} \
-            ${DOCKER_COMPONENTS_DIR}/${comp}
+            .
     fi
 done 
