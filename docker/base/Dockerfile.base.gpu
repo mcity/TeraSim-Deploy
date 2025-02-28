@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     git \
     libssl-dev \
     pkg-config \
+    libxrender1 \
+    libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Create Python symlink
@@ -28,6 +30,11 @@ COPY requirements.common.txt requirements.gpu.txt ./
 RUN pip install --no-cache-dir -r requirements.common.txt \
     && pip install --no-cache-dir -r requirements.gpu.txt
 
+# Install poetry
+RUN pip install --no-cache-dir poetry
+ENV PATH=/root/.local/bin:${PATH}
+RUN poetry config virtualenvs.create false
+
 # Set environment variables for CUDA and Python
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -38,4 +45,5 @@ ENV PYTHONUNBUFFERED=1 \
 
 # Create non-root user
 RUN useradd -m -s /bin/bash terasim
+RUN chown -R terasim:terasim /app
 USER terasim 
