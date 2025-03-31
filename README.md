@@ -8,8 +8,8 @@ TeraSim Deploy integrates the following components:
 - `terasim`: Core simulation engine
 - `terasim_service`: HTTP service interface
 - `terasim_nde_nade`: Neural differential equations component
-- `terasim_data_zoo`: Data management utilities
-- `terasim_gpt`: GPT-based simulation enhancement
+<!-- - `terasim_data_zoo`: Data management utilities
+- `terasim_gpt`: GPT-based simulation enhancement -->
 
 ## Prerequisites
 
@@ -23,8 +23,9 @@ TeraSim Deploy integrates the following components:
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd terasim-deploy
+git clone https://github.com/mcity/TeraSim-Deploy.git
+cd Terasim-Deploy
+bash download_repo.sh # download TeraSim, TeraSim-NDE-NADE, TeraSim-Service
 ```
 
 2. Build images:
@@ -32,20 +33,21 @@ cd terasim-deploy
 # For CPU version
 ./scripts/build.sh --version=1.0.0
 
-# For GPU version
-./scripts/build.sh --version=1.0.0 --gpu
+# # For GPU version
+# ./scripts/build.sh --version=1.0.0 --gpu
 
-# Build specific components
-./scripts/build.sh --version=1.0.0 --gpu --components=terasim_service,terasim_nde_nade
+# # Build specific components
+# ./scripts/build.sh --version=1.0.0 --gpu --components=terasim_service,terasim_nde_nade
 ```
 
 3. Start services:
 ```bash
 # Start all services
-docker compose up -d
+cd docker
+docker-compose up -d
 
-# Start specific services
-docker compose up -d terasim_service redis
+# # Start specific services
+# docker-compose up -d terasim_service redis
 ```
 
 4. Verify deployment:

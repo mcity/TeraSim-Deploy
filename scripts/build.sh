@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define variables
-DOCKER_BASE_DIR="TeraSim-Deploy/docker/base"
-DOCKER_COMPONENTS_DIR="TeraSim-Deploy/docker/components"
+DOCKER_BASE_DIR="docker/base"
+DOCKER_COMPONENTS_DIR="docker/components"
 VERSION="1.0.0"
 CUDA_VERSION="12.1.1"
 

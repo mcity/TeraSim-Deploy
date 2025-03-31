@@ -2,45 +2,12 @@ version: '3.8'
 
 services:
   terasim_service:
-    image: terasim_service:${VERSION:-latest}
+    image: terasim_service:1.0.0-cpu
+    container_name: terasim_service
     ports:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
-      - ENVIRONMENT=${ENVIRONMENT:-development}
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
+      - ENVIRONMENT=development
     volumes:
-      - ./config:/app/config
-    depends_on:
-      - redis
-
-  terasim_nde_nade:
-    image: terasim_nde_nade:${VERSION:-latest}
-    environment:
-      - PYTHONUNBUFFERED=1
-      - ENVIRONMENT=${ENVIRONMENT:-development}
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-    volumes:
-      - ./config:/app/config
-
-  redis:
-    image: redis:7.0-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-
-volumes:
-  redis_data: 
+      - ../examples:/app/examples
