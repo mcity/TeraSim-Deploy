@@ -45,7 +45,8 @@ done
 
 # If no components specified, build all
 if [ ${#COMPONENTS[@]} -eq 0 ]; then
-    COMPONENTS=("terasim" "terasim_nde_nade" "terasim_data_zoo" "terasim_gpt" "terasim_service")
+    # COMPONENTS=("terasim" "terasim_nde_nade" "terasim_data_zoo" "terasim_gpt" "terasim_service")
+    COMPONENTS=("terasim" "terasim_nde_nade" "terasim_service")
 fi
 
 # Build base image

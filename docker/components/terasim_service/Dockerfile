@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y redis
 
 # Expose service port
 EXPOSE 8000
+EXPOSE 2000
 
 # Set environment variables
 ENV PYTHONPATH=/app:${PYTHONPATH}
@@ -30,5 +31,3 @@ ENV PYTHONPATH=/app:${PYTHONPATH}
 USER terasim
 
 WORKDIR /app/TeraSim-Service
-
-CMD ["bash", "examples/main.sh"]

@@ -11,3 +11,5 @@ services:
       - ENVIRONMENT=development
     volumes:
       - ../examples:/app/examples
+    command: ["bash", "examples/main.sh"]
+    

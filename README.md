@@ -24,7 +24,7 @@ TeraSim Deploy integrates the following components:
 1. Clone the repository:
 ```bash
 git clone https://github.com/mcity/TeraSim-Deploy.git
-cd Terasim-Deploy
+cd TeraSim-Deploy
 bash download_repo.sh # download TeraSim, TeraSim-NDE-NADE, TeraSim-Service
 ```
 
@@ -43,37 +43,59 @@ bash download_repo.sh # download TeraSim, TeraSim-NDE-NADE, TeraSim-Service
 3. Start services:
 ```bash
 # Start all services
-cd docker
-docker-compose up -d
+docker-compose -f docker/docker-compose.yml up -d
 
-# # Start specific services
-# docker-compose up -d terasim_service redis
+# Stop all services
+docker-compose -f docker/docker-compose.yml down
 ```
 
 4. Verify deployment:
 ```bash
 curl http://localhost:8000/health
 ```
+If the service is running and healthy, you might see:
+```json
+{"status": "healthy"}
+```
+
+## Advanced Usage
+
+1. TeraSim-Carla co-simulation in Mcity
+```bash
+# Start TeraSim and CARLA co-simulation with CARLA visualization
+docker-compose -f docker/docker-compose-terasim-carla-cosim.yml up -d
+
+# Start TeraSim and CARLA co-simulation without visualization
+docker-compose -f docker/docker-compose-terasim-carla-cosim-offscreen.yml up -d
+
+# Stop all services
+docker-compose -f docker/docker-compose-terasim-carla-cosim.yml down
+docker-compose -f docker/docker-compose-terasim-carla-cosim-offscreen.yml down
+```
+
 
 ## Directory Structure
 
 ```
-terasim-deploy/
-├── docker/                 # Docker configuration
-│   ├── base/              # Base image configuration
+TeraSim-Deploy/
+├── docker/                                         # Docker configuration
+│   ├── base/                                       # Base image configuration
 │   │   ├── Dockerfile.base.cpu
 │   │   ├── Dockerfile.base.gpu
 │   │   └── requirements.*.txt
-│   ├── components/        # Component-specific Dockerfiles
+│   ├── components/                                 # Component-specific Dockerfiles
 │   │   ├── terasim/
 │   │   ├── terasim_service/
 │   │   └── ...
 │   └── docker-compose.yml
-├── config/                # Configuration files
-│   ├── dev/              # Development configs
-│   └── prod/             # Production configs
-└── scripts/              # Utility scripts
-    └── build.sh          # Build script
+├── examples/                                       # Example files
+│   ├── maps/                                       # Maps
+│   │   ├── Mcity_safetest/                         # Mcity map
+│   │   └── ...
+|   ├── simulation_Mcity_carla_config.yaml          # Simulation configs
+│   └── ...                                         
+└── scripts/                                        # Utility scripts
+    └── build.sh                                    # Build script
 ```
 
 ## Configuration

@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  terasim_service:
+    image: terasim_service:1.0.0-cpu
+    container_name: terasim_service
+    network_mode: host
+    environment:
+      - PYTHONUNBUFFERED=1
+      - ENVIRONMENT=development
+    volumes:
+      - ../examples:/app/examples
+    command: ["/bin/bash", "examples/main_cosim.sh"]
+    depends_on:
+      - mcity_carla
+
+  mcity_carla:
+    image: mcity_carla:latest
+    container_name: mcity_carla
+    privileged: true
+    network_mode: host
+    environment:
+      - DISPLAY=
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    command: ["/bin/bash", "./CarlaUE4.sh", "-RenderOffScreen"]
