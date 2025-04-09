@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   terasim_service:
-    image: terasim_service:1.0.0-cpu
+    image: public.ecr.aws/x0u0p9b6/terasim/service:1.0.0-cpu
     container_name: terasim_service
     network_mode: host
     environment:
@@ -15,7 +15,7 @@ services:
       - mcity_carla
 
   mcity_carla:
-    image: mcity_carla:latest
+    image: public.ecr.aws/x0u0p9b6/mcity-digital-twin:0.9.15
     container_name: mcity_carla
     privileged: true
     network_mode: host

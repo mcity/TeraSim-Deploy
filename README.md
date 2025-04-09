@@ -61,6 +61,7 @@ If the service is running and healthy, you might see:
 ## Advanced Usage
 
 1. TeraSim-Carla co-simulation in Mcity
+We have prepared two pre-built Docker images, one containing the TeraSim-related packages and the other containing the CARLA-related packages. Both of them are public and you can access them through [link1](public.ecr.aws/x0u0p9b6/terasim/service) and [link2](public.ecr.aws/x0u0p9b6/mcity-digital-twin). You can directly use these images to run TeraSim and CARLA in a co-simulation environment.
 ```bash
 # Start TeraSim and CARLA co-simulation with CARLA visualization
 docker-compose -f docker/docker-compose-terasim-carla-cosim.yml up -d
