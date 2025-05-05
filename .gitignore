@@ -2,3 +2,4 @@ examples/output
 TeraSim
 TeraSim-NDE-NADE
 TeraSim-Service
+/examples/*map

@@ -30,8 +30,6 @@ environment:
 
     MOBIL_lc_flag: True
     stochastic_acc_flag: False
-    sumo_net_file_path: "examples/maps/town10/town10.net.xml"
-    sumo_cfg_file_path: "examples/maps/town10/town10.sumocfg"
     drive_rule: "righthand"
 
     adversity_cfg:

@@ -8,7 +8,7 @@ parameters:
 simulation_type: "safetest_mcity_av"
 
 output:
-  dir: "/app/examples/output"  # Output directory (use "output" for non-AV simulations)
+  dir: examples/output"  # Output directory (use "output" for non-AV simulations)
   name: "test"  # Experiment name
   nth: "0_0"  # Experiment number
   aggregated_dir: "aggregated"  # Directory for aggregated logs
@@ -30,8 +30,6 @@ environment:
 
     MOBIL_lc_flag: True
     stochastic_acc_flag: False
-    sumo_net_file_path: "/app/examples/maps/Mcity_safetest_carla/mcity.net.xml"
-    sumo_cfg_file_path: "/app/examples/maps/Mcity_safetest_carla/mcity.sumocfg"
     drive_rule: "righthand"
 
     adversity_sampling_probability: 0.1
@@ -168,8 +166,8 @@ simulator:
 
 # New section for file paths
 file_paths:
-  sumo_net_file: "/app/examples/maps/Mcity_safetest_carla/mcity.net.xml"
-  sumo_config_file: "/app/examples/maps/Mcity_safetest_carla/mcity.sumocfg"
+  sumo_net_file: "examples/maps/Mcity_safetest_carla/mcity.net.xml"
+  sumo_config_file: "examples/maps/Mcity_safetest_carla/mcity.sumocfg"
 
 logging:
   levels:
