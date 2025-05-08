@@ -15,7 +15,7 @@ config_loader = ConfigLoader(project_root)
 map_path = None # Path to your map
 
 # Load configuration
-config = config_loader.load_config(map_path, "stalledvehicle")
+config = config_loader.load_config(map_path, ["highway_cutin", "highway_rearend", "highway_rearend_decel"], ["stalledvehicle"])
 
 # Save configuration
 config_loader.save_config(config, "test_config.yaml")

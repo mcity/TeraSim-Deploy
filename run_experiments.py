@@ -24,30 +24,36 @@ def run_simulation(config_file="test_config.yaml", auto_run=False):
         }
     )
     simulation_id = start_response.json()["simulation_id"]
-    
-    # Get simulation status
-    status_response = requests.get(f"{base_url}/simulation_status/{simulation_id}")
-    print(f"Simulation status: {status_response.json()}")
-    
+
+    while True:
+        # Get simulation status
+        try:
+            status_response = requests.get(f"{base_url}/simulation_status/{simulation_id}")
+            # print(f"Simulation status: {status_response.json()}")
+            # Break if simulation is waiting for tick
+            if status_response.json()["status"] == "wait_for_tick":
+                break
+        except Exception as e:
+            print(f"Simulation status not ready: {e}")
+            time.sleep(0.01)
+        
     # Get AV route
     route_response = requests.get(f"{base_url}/av_route/{simulation_id}")
     print(f"AV route: {route_response.json()}")
     
-    if not auto_run:
-        # Manually execute one simulation step
+    while True:
+        # Tick simulation to advance one step
         tick_response = requests.post(f"{base_url}/simulation_tick/{simulation_id}")
-        print(f"Simulation tick result: {tick_response.json()}")
-    
-    # Get simulation state
-    state_response = requests.get(f"{base_url}/simulation/{simulation_id}/state")
-    print(f"Simulation state: {state_response.json()}")
-    
-    # Stop simulation
-    stop_response = requests.post(
-        f"{base_url}/simulation_control/{simulation_id}",
-        json={"command": "stop"}
-    )
-    print(f"Stop simulation result: {stop_response.json()}")
+        # get simulation status
+        while True:
+            status_response = requests.get(f"{base_url}/simulation_status/{simulation_id}")
+            if status_response.json()["status"] == "ticked" or status_response.json()["status"] == "finished":
+                break
+            time.sleep(0.01)
+        state_response = requests.get(f"{base_url}/simulation/{simulation_id}/state")
+        # print(f"Simulation state: {state_response.json()}")
+        if status_response.json()["status"] == "finished":
+            break
     
     # Get simulation results
     result_response = requests.get(f"{base_url}/simulation_result/{simulation_id}")

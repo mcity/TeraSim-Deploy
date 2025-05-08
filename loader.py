@@ -16,7 +16,7 @@ class ConfigLoader:
         self.config_dir = self.project_root / "configs"
         self.examples_dir = self.project_root / "examples"
     
-    def load_config(self, map_path, adversity_name=None):
+    def load_config(self, map_path, behavior_adversity_list=None, static_adversity_list=None):
         """
         Load and merge configurations
         
@@ -55,17 +55,28 @@ class ConfigLoader:
         )
         
         # 6. Load scenario config if specified
-        if adversity_name:
-            adv_path = map_path / "config" / "adversities" / f"{adversity_name}.yaml"
-            if adv_path.exists():
-                adv_config = OmegaConf.load(adv_path)
+        if static_adversity_list:
+            for static_adversity in static_adversity_list:
+                adv_path = map_path / "config" / "adversities" / f"{static_adversity}.yaml"
+                if adv_path.exists():
+                    adv_config = OmegaConf.load(adv_path)
                 # Merge adversity config under environment.parameters
                 if "environment" not in config:
                     config.environment = {}
                 if "parameters" not in config.environment:
                     config.environment.parameters = {}
                 config.environment.parameters = OmegaConf.merge(config.environment.parameters, adv_config)
-        
+        if behavior_adversity_list:
+            for behavior_adversity in behavior_adversity_list:
+                adv_path = self.config_dir / "adversities" / "vehicle" / f"{behavior_adversity}.yaml"
+                if adv_path.exists():
+                    adv_config = OmegaConf.load(adv_path)
+                # Merge adversity config under environment.parameters
+                if "environment" not in config:
+                    config.environment = {}
+                if "parameters" not in config.environment:
+                    config.environment.parameters = {}
+                config.environment.parameters = OmegaConf.merge(config.environment.parameters, adv_config)
         return config
     
     def save_config(self, config, output_path):
