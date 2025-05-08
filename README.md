@@ -1,159 +1,68 @@
-# TeraSim Deploy
-
-TeraSim Deploy provides containerized deployment solutions for the TeraSim autonomous driving simulation platform. This repository orchestrates the deployment of various TeraSim components using Docker.
-
-## Components
-
-TeraSim Deploy integrates the following components:
-- `terasim`: Core simulation engine
-- `terasim_service`: HTTP service interface
-- `terasim_nde_nade`: Neural differential equations component
-<!-- - `terasim_data_zoo`: Data management utilities
-- `terasim_gpt`: GPT-based simulation enhancement -->
+# Local Development Setup Guide
 
 ## Prerequisites
 
-- Docker >= 20.10
-- Docker Compose >= 2.0
-- NVIDIA Container Toolkit (for GPU support)
-- 16GB+ RAM recommended
-- 50GB+ free disk space
+- Ubuntu 22.04 (x86)
+- Python 3.10 
+- Poetry (Python package manager)
+- Conda (for virtual environment management)
+- Redis (running on port 6379)
 
-## Quick Start
+## Environment Setup
 
-1. Clone the repository:
+1. Install and start Redis:
 ```bash
-git clone https://github.com/mcity/TeraSim-Deploy.git
-cd TeraSim-Deploy
-bash download_repo.sh # download TeraSim, TeraSim-NDE-NADE, TeraSim-Service
+sudo apt-get update
+sudo apt-get install redis-server
+sudo systemctl start redis-server
+sudo systemctl enable redis-server
 ```
 
-2. Build images:
+2. Create and activate a Conda virtual environment:
 ```bash
-# For CPU version
-./scripts/build.sh --version=1.0.0
-
-# # For GPU version
-# ./scripts/build.sh --version=1.0.0 --gpu
-
-# # Build specific components
-# ./scripts/build.sh --version=1.0.0 --gpu --components=terasim_service,terasim_nde_nade
+conda create -n terasim python=3.10
+conda activate terasim
 ```
 
-3. Start services:
+3. Install Poetry if not already installed:
 ```bash
-# Start all services
-docker-compose -f docker/docker-compose.yml up -d
-
-# Stop all services
-docker-compose -f docker/docker-compose.yml down
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 
-4. Verify deployment:
+4. Navigate to the project directory and install dependencies:
 ```bash
-curl http://localhost:8000/health
+bash download_repo.sh
+cd TeraSim
+poetry install
+cd ..
+cd TeraSim-NDE-NADE
+poetry install
+cd ..
+cd TeraSim-Service
+poetry install
 ```
-If the service is running and healthy, you might see:
-```json
-{"status": "healthy"}
-```
 
-## Advanced Usage
+## Running the Service
 
-1. TeraSim-Carla co-simulation in Mcity
-We have prepared two pre-built Docker images, one containing the TeraSim-related packages and the other containing the CARLA-related packages. Both of them are public and you can access them through [link1](https://gallery.ecr.aws/x0u0p9b6/terasim/service) and [link2](https://gallery.ecr.aws/x0u0p9b6/mcity-digital-twin). You can directly use these images to run TeraSim and CARLA in a co-simulation environment.
-
+1. Start the HTTP co-simulation service:
 ```bash
-# Start TeraSim and CARLA co-simulation with CARLA visualization
-docker-compose -f docker/docker-compose-terasim-carla-cosim.yml up -d
-
-# Start TeraSim and CARLA co-simulation without visualization
-docker-compose -f docker/docker-compose-terasim-carla-cosim-offscreen.yml up -d
-
-# Stop all services
-docker-compose -f docker/docker-compose-terasim-carla-cosim.yml down
-docker-compose -f docker/docker-compose-terasim-carla-cosim-offscreen.yml down
+python safetest_http_cosim_main.py
 ```
 
-
-## Directory Structure
-
-```
-TeraSim-Deploy/
-├── docker/                                         # Docker configuration
-│   ├── base/                                       # Base image configuration
-│   │   ├── Dockerfile.base.cpu
-│   │   ├── Dockerfile.base.gpu
-│   │   └── requirements.*.txt
-│   ├── components/                                 # Component-specific Dockerfiles
-│   │   ├── terasim/
-│   │   ├── terasim_service/
-│   │   └── ...
-│   └── docker-compose.yml
-├── examples/                                       # Example files
-│   ├── maps/                                       # Maps
-│   │   ├── Mcity_safetest/                         # Mcity map
-│   │   └── ...
-|   ├── simulation_Mcity_carla_config.yaml          # Simulation configs
-│   └── ...                                         
-└── scripts/                                        # Utility scripts
-    └── build.sh                                    # Build script
-```
-
-## Configuration
-
-### Environment Variables
-
-Key configuration options:
-- `VERSION`: Version of TeraSim components
-- `ENVIRONMENT`: Deployment environment (development/production)
-- `CUDA_VISIBLE_DEVICES`: GPU device selection
-
-### Component Configuration
-
-Each component can be configured through:
-- Environment variables
-- Configuration files in `config/` directory
-- Docker Compose overrides
-
-## Health Monitoring
-
-- Service health endpoint: `http://localhost:8000/health`
-- Container health checks are configured in docker-compose.yml
-
-## Scaling
-
+If you see port 8000 is already in use error, this is because the previous service was not properly cleaned up. You can clean it up using:
 ```bash
-# Scale specific services
-docker compose up -d --scale terasim_service=3
+kill -9 $(lsof -t -i:8000)
 ```
 
-## Troubleshooting
+## Testing the Service
 
-1. Image building issues:
-```bash
-# Check build logs
-./scripts/build.sh --version=1.0.0 --gpu 2>&1 | tee build.log
-```
+You can use the provided REST file to test the HTTP endpoints:
 
-2. Container issues:
-```bash
-# Check container logs
-docker compose logs -f [service-name]
-```
+1. Open `examples/terasim_request.rest` in your preferred REST client (e.g., VS Code REST Client extension)
+2. Send HTTP requests to test the service functionality
 
-3. GPU support:
-```bash
-# Verify GPU access
-docker run --rm --gpus all nvidia/cuda:12.1.1-base nvidia-smi
-```
+## Notes
 
-## Support
-
-For deployment-related issues:
-- GitHub Issues: <repository-url>/issues
-- Documentation: <docs-url>
-
-## License
-
-[License Type] - See LICENSE file for details 
+- Make sure all dependencies are properly installed before running the service
+- The service must be running before sending test requests
+- Check the logs for any potential errors during execution

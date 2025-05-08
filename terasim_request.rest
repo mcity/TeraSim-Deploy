@@ -4,7 +4,7 @@ POST http://localhost:8000/start_simulation
 Content-Type: application/json
 
 {
-    "config_file": "/home/mtl/Bot-Auto-Demo/examples/simulation_Mcity_carla_config.yaml",
+    "config_file": "test_config.yaml",
     "auto_run": false
 }
 
@@ -14,13 +14,8 @@ Content-Type: application/json
 ### Check simulation status
 GET http://localhost:8000/simulation_status/{{simulationId}}
 
-### Stop the simulation
-POST http://localhost:8000/simulation_control/{{simulationId}}
-Content-Type: application/json
-
-{
-    "command": "stop"
-}
+### Get AV route
+GET http://localhost:8000/av_route/{{simulationId}}
 
 ### Tick the simulation (advance one step) only works when auto_run is false
 POST http://localhost:8000/simulation_tick/{{simulationId}}
@@ -43,3 +38,13 @@ Content-Type: application/json
     }
 }
 
+### Stop the simulation
+POST http://localhost:8000/simulation_control/{{simulationId}}
+Content-Type: application/json
+
+{
+    "command": "stop"
+}
+
+### Check simulation result
+GET http://localhost:8000/simulation_result/{{simulationId}}
