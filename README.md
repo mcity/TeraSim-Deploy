@@ -46,7 +46,7 @@ poetry install
 
 1. Start the HTTP co-simulation service:
 ```bash
-python safetest_http_cosim_main.py
+python terasim_service_main.py
 ```
 
 If you see port 8000 is already in use error, this is because the previous service was not properly cleaned up. You can clean it up using:
@@ -60,6 +60,14 @@ You can use the provided REST file to test the HTTP endpoints:
 
 1. Open `examples/terasim_request.rest` in your preferred REST client (e.g., VS Code REST Client extension)
 2. Send HTTP requests to test the service functionality
+
+## Running Experiments
+
+I have provided a script to run the experiments using HTTP API with result analysis.
+```bash
+python run_experiments.py
+```
+
 
 ## Notes
 
