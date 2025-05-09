@@ -45,10 +45,15 @@ def run_simulation(config_file="test_config.yaml", auto_run=False):
         # Tick simulation to advance one step
         tick_response = requests.post(f"{base_url}/simulation_tick/{simulation_id}")
         # get simulation status
+        start_time = time.time()
         while True:
             status_response = requests.get(f"{base_url}/simulation_status/{simulation_id}")
             if status_response.json()["status"] == "ticked" or status_response.json()["status"] == "finished":
                 break
+            if time.time() - start_time > 1.0:
+                print("Simulation stuck for more than 1 second, stopping...")
+                requests.post(f"{base_url}/stop_simulation/{simulation_id}")
+                return {"error": "Simulation timeout"}
             time.sleep(0.01)
         state_response = requests.get(f"{base_url}/simulation/{simulation_id}/state")
         # print(f"Simulation state: {state_response.json()}")
