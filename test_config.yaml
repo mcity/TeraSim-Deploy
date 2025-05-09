@@ -2,7 +2,7 @@ environment:
   class: NADEWithAV
   module: terasim_nde_nade.envs
   parameters:
-    CAV_cfg:
+    AV_cfg:
       cache_radius: 100
       control_radius: 50
       initial_lane_index: 0

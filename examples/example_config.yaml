@@ -59,8 +59,8 @@ environment:
           probability: 0.001
           predicted_collision_type: "intersection_jaywalking"
 
-    CAV_cfg:
-      type: "veh_CAV"
+    AV_cfg:
+      type: "veh_AV"
       cache_radius: 150
       control_radius: 50
 

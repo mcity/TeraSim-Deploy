@@ -2,7 +2,7 @@
 
 environment:
   parameters:
-    CAV_cfg:
+    AV_cfg:
       type: "vehicle_passenger"
       cache_radius: 100
       control_radius: 50
