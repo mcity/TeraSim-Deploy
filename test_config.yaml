@@ -75,4 +75,4 @@ simulator:
     - fcd_all
     - collision
     - tripinfo
-    sumo_seed: 42
+    sumo_seed: 21448
