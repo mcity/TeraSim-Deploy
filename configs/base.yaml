@@ -4,6 +4,8 @@ output:
   nth: "0_0"  # Experiment number
   aggregated_dir: "aggregated"  # Directory for aggregated logs
 
+seed: 42
+
 simulator:
   module: "terasim.simulator"
   class: "Simulator"
@@ -11,6 +13,7 @@ simulator:
     num_tries: 10
     gui_flag: false
     realtime_flag: false  # Only applicable for AV mode
+    sumo_seed: 42
     sumo_output_file_types: 
       - "fcd_all"
       - "collision"

@@ -63,6 +63,7 @@ output:
   dir: outputs
   name: test
   nth: '0_0'
+seed: 42
 simulator:
   class: Simulator
   module: terasim.simulator
@@ -74,3 +75,4 @@ simulator:
     - fcd_all
     - collision
     - tripinfo
+    sumo_seed: 42

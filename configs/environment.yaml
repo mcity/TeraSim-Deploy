@@ -16,5 +16,4 @@ environment:
     MOBIL_lc_flag: True
     stochastic_acc_flag: False
     drive_rule: "righthand"
-
     adversity_sampling_probability: 0.1 

@@ -12,7 +12,7 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent
 config_loader = ConfigLoader(project_root)
 
-map_path = None # Path to your map
+map_path = # Path to your map
 
 # Load configuration
 config = config_loader.load_config(map_path, ["highway_cutin", "highway_rearend", "highway_rearend_decel"], ["stalledvehicle"])
