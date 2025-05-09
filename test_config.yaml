@@ -52,8 +52,8 @@ environment:
     warmup_time_lb: 749
     warmup_time_ub: 750
 input:
-  sumo_config_file: /home/mtl/Bot-Auto-Demo/examples/bot_map/0/sumo_medium.sumocfg
-  sumo_net_file: /home/mtl/Bot-Auto-Demo/examples/bot_map/0/map.net.xml
+  sumo_config_file: examples/bot_map/0/sumo_medium.sumocfg
+  sumo_net_file: examples/bot_map/0/map.net.xml
 logging:
   levels:
   - TRACE
