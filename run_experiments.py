@@ -2,7 +2,20 @@ import requests
 import json
 import time
 
-def run_simulation(config_file="test_config.yaml", auto_run=False):
+
+def get_av_state(base_url, simulation_id):
+    av_route_response = requests.get(f"{base_url}/av_route/{simulation_id}")
+    state_response = requests.get(f"{base_url}/simulation/{simulation_id}/state")
+    state_json = state_response.json()
+    av_state = state_json["agent_details"]["vehicle"]["AV"]
+    return {
+        "state": av_state,
+        "route": av_route_response.json()
+    }
+
+
+
+def run_simulation(config_file="test_config.yaml", auto_run=False, initialize_timeout=10, tick_timeout=1):
     """
     Run simulation and provide HTTP API interface calls
     
@@ -25,6 +38,7 @@ def run_simulation(config_file="test_config.yaml", auto_run=False):
     )
     simulation_id = start_response.json()["simulation_id"]
 
+    start_time = time.time()
     while True:
         # Get simulation status
         try:
@@ -33,13 +47,16 @@ def run_simulation(config_file="test_config.yaml", auto_run=False):
             # Break if simulation is waiting for tick
             if status_response.json()["status"] == "wait_for_tick":
                 break
+            if time.time() - start_time > initialize_timeout:  # 10 seconds timeout
+                print("Simulation initialization timeout, stopping...")
+                requests.post(f"{base_url}/simulation_control/{simulation_id}", json={"command": "stop"})
+                raise TimeoutError("Simulation initialization timeout")
         except Exception as e:
             print(f"Simulation status not ready: {e}")
             time.sleep(0.01)
         
-    # Get AV route
-    route_response = requests.get(f"{base_url}/av_route/{simulation_id}")
-    print(f"AV route: {route_response.json()}")
+    # Get AV state
+    av_state = get_av_state(base_url, simulation_id)
     
     while True:
         # Tick simulation to advance one step
@@ -50,7 +67,7 @@ def run_simulation(config_file="test_config.yaml", auto_run=False):
             status_response = requests.get(f"{base_url}/simulation_status/{simulation_id}")
             if status_response.json()["status"] == "ticked" or status_response.json()["status"] == "finished":
                 break
-            if time.time() - start_time > 1.0:
+            if time.time() - start_time > tick_timeout:
                 print("Simulation stuck for more than 1 second, stopping...")
                 requests.post(f"{base_url}/simulation_control/{simulation_id}", json={"command": "stop"})
                 return {"error": "Simulation timeout"}
