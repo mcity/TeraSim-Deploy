@@ -11,15 +11,15 @@ environment:
       type: vehicle_passenger
     MOBIL_lc_flag: true
     adversity_cfg:
-      static:
-        stalled_object:
-          _convert_: all
-          _target_: terasim_nde_nade.adversity.StalledObjectAdversity
-          end_time: 1200
-          lane_id: '1202002183_1'
-          lane_position: 245.0
-          object_type: vehicle_passenger
-          start_time: 700
+      # static:
+      #   stalled_object:
+      #     _convert_: all
+      #     _target_: terasim_nde_nade.adversity.StalledObjectAdversity
+      #     end_time: 1200
+      #     lane_id: '1202002183_1'
+      #     lane_position: 245.0
+      #     object_type: vehicle_passenger
+      #     start_time: 700
       vehicle:
         highway_cutin:
           _convert_: all
@@ -52,8 +52,8 @@ environment:
     warmup_time_lb: 749
     warmup_time_ub: 750
 input:
-  sumo_config_file: examples/bot_map/0/sumo_medium.sumocfg
-  sumo_net_file: examples/bot_map/0/map.net.xml
+  sumo_config_file: examples/bot_map_full/1/simulation.sumocfg
+  sumo_net_file: examples/bot_map_full/1/map.net.xml
 logging:
   levels:
   - TRACE

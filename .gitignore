@@ -35,4 +35,5 @@ TeraSim
 TeraSim-NDE-NADE
 TeraSim-Service
 /examples/*map
+/examples/*map_full
 test.yaml
