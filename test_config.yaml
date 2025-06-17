@@ -28,13 +28,20 @@ environment:
           location: highway
           predicted_collision_type: highway_cutin
           probability: 3.1996225726187704e-05
-        highway_rearend:
+        highway_cutin_abort:
           _convert_: all
-          _target_: terasim_nde_nade.adversity.vehicles.leader_adversity.LeaderAdversity
+          _target_: terasim_nde_nade.adversity.vehicles.lanechangeabort_adversity.LanechangeAbortAdversity
           ego_type: vehicle
           location: highway
-          predicted_collision_type: highway_rearend
-          probability: 0.0001
+          predicted_collision_type: highway_cutin
+          probability: 1e-5
+        # highway_rearend:
+        #   _convert_: all
+        #   _target_: terasim_nde_nade.adversity.vehicles.leader_adversity.LeaderAdversity
+        #   ego_type: vehicle
+        #   location: highway
+        #   predicted_collision_type: highway_rearend
+        #   probability: 0.0001
         highway_rearend_decel:
           _convert_: all
           _target_: terasim_nde_nade.adversity.vehicles.FollowerAdversity
@@ -52,8 +59,8 @@ environment:
     warmup_time_lb: 749
     warmup_time_ub: 750
 input:
-  sumo_config_file: examples/bot_map_full/1/simulation.sumocfg
-  sumo_net_file: examples/bot_map_full/1/map.net.xml
+  sumo_config_file: examples/bot_map_full/2/simulation.sumocfg
+  sumo_net_file: examples/bot_map_full/2/map.net.xml
 logging:
   levels:
   - TRACE
@@ -68,7 +75,7 @@ simulator:
   class: Simulator
   module: terasim.simulator
   parameters:
-    gui_flag: true
+    gui_flag: false
     num_tries: 10
     realtime_flag: false
     sumo_output_file_types:
