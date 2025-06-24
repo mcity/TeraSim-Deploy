@@ -1,4 +1,5 @@
 import argparse
+import random
 import hydra
 from loguru import logger
 from omegaconf import DictConfig, OmegaConf
@@ -39,6 +40,7 @@ def main(config_path: str) -> None:
         sumo_config_file_path=config.input.sumo_config_file,
         num_tries=10,
         gui_flag=config.simulator.parameters.gui_flag,
+        # gui_flag=True,
         realtime_flag=config.simulator.parameters.realtime_flag,
         output_path=base_dir,
         sumo_output_file_types=["fcd_all", "collision", "tripinfo"],
@@ -54,10 +56,12 @@ def main(config_path: str) -> None:
 
 if __name__ == "__main__":
     # Get all yaml files in config_yamls directory
-    config_dir = Path(__file__).parent / "config_yamls"
+    config_dir = Path(__file__).parent / "config_yamls" / "config_yaml_with_static"
     yaml_files = sorted(config_dir.glob("*.yaml"), key=lambda x: int(''.join(filter(str.isdigit, x.stem)) or '0'))
-    # yaml_files = ["test_config.yaml"]
-    
+    # yaml_files = ["config_yamls/config_yaml_with_static/config_0_000.yaml"]
+    # Randomly shuffle yaml files
+    random.shuffle(yaml_files)
+
     # Run experiments for each yaml file
     for yaml_file in tqdm(yaml_files):
         print(yaml_file)
@@ -66,6 +70,6 @@ if __name__ == "__main__":
             main(str(yaml_file))
         except Exception as e:
             logger.error(f"Error running {yaml_file}: {e}")
-            yaml_file.unlink()  # Delete the yaml file
+            # yaml_file.unlink()  # Delete the yaml file
             continue
     main()
