@@ -72,4 +72,3 @@ if __name__ == "__main__":
             logger.error(f"Error running {yaml_file}: {e}")
             # yaml_file.unlink()  # Delete the yaml file
             continue
-    main()

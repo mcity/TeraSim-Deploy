@@ -20,21 +20,21 @@ environment:
       #     lane_position: 245.0
       #     object_type: vehicle_passenger
       #     start_time: 700
-      vehicle:
-        highway_cutin:
-          _convert_: all
-          _target_: terasim_nde_nade.adversity.vehicles.lanechange_adversity.LanechangeAdversity
-          ego_type: vehicle
-          location: highway
-          predicted_collision_type: highway_cutin
-          probability: 3.1996225726187704e-05
-        highway_cutin_abort:
-          _convert_: all
-          _target_: terasim_nde_nade.adversity.vehicles.lanechangeabort_adversity.LanechangeAbortAdversity
-          ego_type: vehicle
-          location: highway
-          predicted_collision_type: highway_cutin
-          probability: 1e-5
+      # vehicle:
+      #   highway_cutin:
+      #     _convert_: all
+      #     _target_: terasim_nde_nade.adversity.vehicles.lanechange_adversity.LanechangeAdversity
+      #     ego_type: vehicle
+      #     location: highway
+      #     predicted_collision_type: highway_cutin
+      #     probability: 3.1996225726187704e-05
+      #   highway_cutin_abort:
+      #     _convert_: all
+      #     _target_: terasim_nde_nade.adversity.vehicles.lanechangeabort_adversity.LanechangeAbortAdversity
+      #     ego_type: vehicle
+      #     location: highway
+      #     predicted_collision_type: highway_cutin
+      #     probability: 1e-5
         # highway_rearend:
         #   _convert_: all
         #   _target_: terasim_nde_nade.adversity.vehicles.leader_adversity.LeaderAdversity
@@ -59,8 +59,8 @@ environment:
     warmup_time_lb: 749
     warmup_time_ub: 750
 input:
-  sumo_config_file: examples/bot_map_full/2/simulation.sumocfg
-  sumo_net_file: examples/bot_map_full/2/map.net.xml
+  sumo_config_file: austin_cases/austin_wrong_leftturn_case/simulation.sumocfg
+  sumo_net_file: austin_cases/austin_wrong_leftturn_case/map.net.xml
 logging:
   levels:
   - TRACE
