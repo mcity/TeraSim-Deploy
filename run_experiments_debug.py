@@ -8,7 +8,7 @@ from tqdm import tqdm
 from terasim.logger.infoextractor import InfoExtractor
 from terasim.simulator import Simulator
 
-from terasim_nde_nade.envs import NADEWithAV
+from terasim_nde_nade.envs import NADE, NADEWithAV
 from terasim_nde_nade.vehicle import NDEVehicleFactory
 from terasim_nde_nade.vru import NDEVulnerableRoadUserFactory
 
@@ -39,8 +39,8 @@ def main(config_path: str) -> None:
         sumo_net_file_path=config.input.sumo_net_file,
         sumo_config_file_path=config.input.sumo_config_file,
         num_tries=10,
-        gui_flag=config.simulator.parameters.gui_flag,
-        # gui_flag=True,
+        # gui_flag=config.simulator.parameters.gui_flag,
+        gui_flag=True,
         realtime_flag=config.simulator.parameters.realtime_flag,
         output_path=base_dir,
         sumo_output_file_types=["fcd_all", "collision", "tripinfo"],
@@ -58,6 +58,7 @@ if __name__ == "__main__":
     # Get all yaml files in config_yamls directory
     config_dir = Path(__file__).parent / "config_yamls" / "config_yaml_with_static"
     yaml_files = sorted(config_dir.glob("*.yaml"), key=lambda x: int(''.join(filter(str.isdigit, x.stem)) or '0'))
+    yaml_files = ["config_yamls/config_yaml_with_static/config_74_006.yaml"]
     # yaml_files = ["config_yamls/config_yaml_with_static/config_0_000.yaml"]
     # Randomly shuffle yaml files
     random.shuffle(yaml_files)
