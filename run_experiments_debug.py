@@ -43,8 +43,10 @@ def main(config_path: str) -> None:
         gui_flag=True,
         realtime_flag=config.simulator.parameters.realtime_flag,
         output_path=base_dir,
-        sumo_output_file_types=["fcd_all", "collision", "tripinfo"],
-        additional_sumo_args=["--device.bluelight.explicit","true"],
+        sumo_output_file_types=["collision"],
+        additional_sumo_args=[
+            "--device.bluelight.explicit","true",
+        ],
     )
     sim.bind_env(env)
 
@@ -58,7 +60,7 @@ if __name__ == "__main__":
     # Get all yaml files in config_yamls directory
     config_dir = Path(__file__).parent / "config_yamls" / "config_yaml_with_static"
     yaml_files = sorted(config_dir.glob("*.yaml"), key=lambda x: int(''.join(filter(str.isdigit, x.stem)) or '0'))
-    yaml_files = ["config_yamls/config_yaml_with_static/config_74_006.yaml"]
+    yaml_files = ["config_yamls/config_yaml_with_static/config_2_000.yaml"]
     # yaml_files = ["config_yamls/config_yaml_with_static/config_0_000.yaml"]
     # Randomly shuffle yaml files
     random.shuffle(yaml_files)

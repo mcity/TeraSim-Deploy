@@ -15,7 +15,7 @@ def get_av_state(base_url, simulation_id):
 
 
 
-def run_simulation(config_file="test_config.yaml", auto_run=False, initialize_timeout=10, tick_timeout=1):
+def run_simulation(config_file="police_pullover_case.yaml", auto_run=False, initialize_timeout=3600, tick_timeout=3600):
     """
     Run simulation and provide HTTP API interface calls
     
@@ -54,7 +54,7 @@ def run_simulation(config_file="test_config.yaml", auto_run=False, initialize_ti
         except Exception as e:
             print(f"Simulation status not ready: {e}")
             time.sleep(0.01)
-        
+
     # Get AV state
     av_state = get_av_state(base_url, simulation_id)
     
