@@ -15,13 +15,18 @@ def get_av_state(base_url, simulation_id):
 
 
 
-def run_simulation(config_file="police_pullover_case.yaml", auto_run=False, initialize_timeout=3600, tick_timeout=3600):
+def run_simulation(config_file="police_pullover_case.yaml", auto_run=False, initialize_timeout=3600, tick_timeout=3600, enable_viz=False, viz_port=8501, viz_update_freq=1):
     """
     Run simulation and provide HTTP API interface calls
     
     Args:
         config_file (str): Path to configuration file
         auto_run (bool): Whether to run simulation automatically
+        initialize_timeout (int): Timeout for initialization in seconds
+        tick_timeout (int): Timeout for each tick in seconds
+        enable_viz (bool): Whether to enable visualization
+        viz_port (int): Port for visualization server
+        viz_update_freq (int): Visualization update frequency
     
     Returns:
         dict: Simulation results
@@ -34,9 +39,20 @@ def run_simulation(config_file="police_pullover_case.yaml", auto_run=False, init
         json={
             "config_file": config_file,
             "auto_run": auto_run
+        },
+        params={
+            "enable_viz": enable_viz,
+            "viz_port": viz_port,
+            "viz_update_freq": viz_update_freq
         }
     )
-    simulation_id = start_response.json()["simulation_id"]
+    response_data = start_response.json()
+    simulation_id = response_data["simulation_id"]
+    
+    # Print visualization URL if enabled
+    if enable_viz and "visualization_url" in response_data:
+        print(f"🎨 Visualization available at: {response_data['visualization_url']}")
+        print(f"   Open this URL in your browser to see real-time visualization")
 
     start_time = time.time()
     while True:
@@ -56,7 +72,7 @@ def run_simulation(config_file="police_pullover_case.yaml", auto_run=False, init
             time.sleep(0.01)
 
     # Get AV state
-    av_state = get_av_state(base_url, simulation_id)
+    # av_state = get_av_state(base_url, simulation_id)
     
     while True:
         # Tick simulation to advance one step
@@ -82,5 +98,15 @@ def run_simulation(config_file="police_pullover_case.yaml", auto_run=False, init
     return result_response.json()
 
 if __name__ == "__main__":
-    result = run_simulation()
+    # Example 1: Run simulation without visualization (default)
+    # result = run_simulation(config_file="config_yamls/config_yaml_with_static/config_2_002.yaml")
+    
+    # Example 2: Run simulation with visualization
+    result = run_simulation(
+        config_file="police_pullover_case.yaml",
+        enable_viz=True,  # Enable visualization
+        viz_port=8501,    # Visualization port
+        viz_update_freq=1 # Update every 5 simulation steps
+    )
+    
     print(f"Final simulation result: {result}")
