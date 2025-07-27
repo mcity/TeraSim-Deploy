@@ -13,9 +13,6 @@ from terasim_nde_nade.vehicle import NDEVehicleFactory
 from terasim_nde_nade.vru import NDEVulnerableRoadUserFactory
 
 
-
-
-
 def main(config_path: str) -> None:
     config = OmegaConf.load(config_path)
     base_dir = Path(config.output.dir) / config.output.name / "raw_data" / config.output.nth
@@ -61,7 +58,7 @@ if __name__ == "__main__":
     config_dir = Path(__file__).parent / "config_yamls" / "config_yaml_with_static"
     yaml_files = sorted(config_dir.glob("*.yaml"), key=lambda x: int(''.join(filter(str.isdigit, x.stem)) or '0'))
     yaml_files = ["config_yamls/config_yaml_with_static/config_2_002 .yaml"]
-    # yaml_files = ["police_pullover_case.yaml"]
+    yaml_files = ["police_pullover_case.yaml"]
     # Randomly shuffle yaml files
     random.shuffle(yaml_files)
 

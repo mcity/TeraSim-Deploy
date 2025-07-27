@@ -7,7 +7,8 @@ environment:
       control_radius: 50
       initial_lane_index: 0
       initial_lane_position: 0.0
-      initial_speed: 0.0
+      initial_speed: 30.0
+      clearance_distance: 50
       type: vehicle_passenger
     MOBIL_lc_flag: true
     adversity_cfg:
