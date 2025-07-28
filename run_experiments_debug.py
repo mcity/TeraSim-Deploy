@@ -56,9 +56,9 @@ def main(config_path: str) -> None:
 if __name__ == "__main__":
     # Get all yaml files in config_yamls directory
     config_dir = Path(__file__).parent / "config_yamls" / "config_yaml_with_static"
-    yaml_files = sorted(config_dir.glob("*.yaml"), key=lambda x: int(''.join(filter(str.isdigit, x.stem)) or '0'))
-    yaml_files = ["config_yamls/config_yaml_with_static/config_2_002 .yaml"]
-    yaml_files = ["police_pullover_case.yaml"]
+    # yaml_files = sorted(config_dir.glob("*.yaml"), key=lambda x: int(''.join(filter(str.isdigit, x.stem)) or '0'))
+    # yaml_files = ["config_yamls/config_yaml_with_static/config_2_002.yaml"]
+    yaml_files = [Path("construction_zone_professional.yaml")]
     # Randomly shuffle yaml files
     random.shuffle(yaml_files)
 
@@ -66,9 +66,10 @@ if __name__ == "__main__":
     for yaml_file in tqdm(yaml_files):
         print(yaml_file)
         logger.info(f"Running experiment with config: {yaml_file}")
-        try:
-            main(str(yaml_file))
-        except Exception as e:
-            logger.error(f"Error running {yaml_file}: {e}")
-            # yaml_file.unlink()  # Delete the yaml file
-            continue
+        main(str(yaml_file))
+        # try:
+        #     main(str(yaml_file))
+        # except Exception as e:
+        #     logger.error(f"Error running {yaml_file}: {e}")
+        #     # yaml_file.unlink()  # Delete the yaml file
+            # continue
