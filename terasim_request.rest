@@ -4,7 +4,7 @@ POST http://localhost:8000/start_simulation?enable_viz=true&viz_port=8050&viz_up
 Content-Type: application/json
 
 {
-    "config_file": "police_pullover_case.yaml",
+    "config_file": "construction_zone.yaml",
     "auto_run": false
 }
 
