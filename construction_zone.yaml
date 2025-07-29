@@ -87,7 +87,7 @@ simulator:
   class: Simulator
   module: terasim.simulator
   parameters:
-    gui_flag: true  # Enable GUI to see the construction zone
+    gui_flag: false  # Enable GUI to see the construction zone
     num_tries: 10
     realtime_flag: false
     sumo_output_file_types:
