@@ -106,7 +106,7 @@ if __name__ == "__main__":
         config_file="police_pullover_case.yaml",
         enable_viz=True,  # Enable visualization
         viz_port=8501,    # Visualization port
-        viz_update_freq=1 # Update every 5 simulation steps
+        viz_update_freq=2 # Update every 2 simulation steps (reduce load)
     )
     
     print(f"Final simulation result: {result}")
