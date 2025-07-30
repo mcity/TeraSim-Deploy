@@ -25,8 +25,8 @@ def main(config_path: str) -> None:
         info_extractor=InfoExtractor, 
         log_flag=True,
         log_dir=base_dir,
-        warmup_time_lb=599,
-        warmup_time_ub=600,
+        warmup_time_lb=config.environment.parameters.warmup_time_lb,
+        warmup_time_ub=config.environment.parameters.warmup_time_ub,
         run_time=1200,
         configuration=config.environment.parameters,
     )
@@ -41,6 +41,7 @@ def main(config_path: str) -> None:
         realtime_flag=config.simulator.parameters.realtime_flag,
         output_path=base_dir,
         sumo_output_file_types=["collision"],
+        traffic_scale=config.simulator.parameters.traffic_scale if hasattr(config.simulator.parameters, "traffic_scale") else 1,
         additional_sumo_args=[
             "--device.bluelight.explicit","true",
         ],
@@ -58,7 +59,7 @@ if __name__ == "__main__":
     config_dir = Path(__file__).parent / "config_yamls" / "config_yaml_with_static"
     # yaml_files = sorted(config_dir.glob("*.yaml"), key=lambda x: int(''.join(filter(str.isdigit, x.stem)) or '0'))
     # yaml_files = ["config_yamls/config_yaml_with_static/config_2_002.yaml"]
-    yaml_files = [Path("construction_zone.yaml")]
+    yaml_files = [Path("stalled_vehicle_disappear_front_vehicle.yaml")]
     # Randomly shuffle yaml files
     random.shuffle(yaml_files)
 

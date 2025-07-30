@@ -14,7 +14,7 @@ environment:
     adversity_cfg:
       static:
         # Professional construction zone with full taper design
-        construction_zone_professional:
+        construction_zone_with_truck:
           _convert_: all
           _target_: terasim_nde_nade.adversity.ConstructionAdversity
           lane_id: "95975047_0"  # Update this to match your map
@@ -45,7 +45,18 @@ environment:
           # Object configuration
           construction_type: "cone"  # Mix of cones and barriers for visibility
           spacing: 21.0               # Default ~70 feet (will be overridden by dynamic spacing)
-          
+
+        stalled_object:
+          _convert_: all
+          _target_: terasim_nde_nade.adversity.StalledObjectAdversity
+          placement_mode: xy_angle
+          x: 1337.68
+          y: 666.70
+          angle: 260
+          object_type: TRUCK
+          other_settings:
+            duration: 1200
+
       vehicle:
         highway_rearend_decel:
           _convert_: all
@@ -80,7 +91,7 @@ logging:
 output:
   aggregated_dir: aggregated
   dir: outputs
-  name: construction_zone
+  name: construction_zone_with_truck
   nth: 000_53688
 seed: 12345
 simulator:
