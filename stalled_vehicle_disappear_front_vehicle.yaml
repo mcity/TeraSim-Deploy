@@ -5,8 +5,21 @@ environment:
     AV_cfg:
       cache_radius: 100
       control_radius: 50
-      initial_lane_index: 0
-      initial_lane_position: 951.38
+      # Example 1: Traditional lane-based positioning (for compatibility)
+      # initial_lane_index: 0
+      # initial_lane_position: 951.38
+      # Example 2: XY coordinate positioning
+      # initial_position_type: "xy"
+      # initial_xy:
+      #   x: 1325.42
+      #   y: 668.90
+      # Example 3: Lat/Lon positioning (commented out)
+      initial_position_type: "latlon"
+      initial_latlon:
+        lat: 29.7587909
+        lon: -96.221265
+      
+      # Common parameters for all positioning types
       initial_speed: 30.0
       clearance_distance: 50
       type: vehicle_passenger
