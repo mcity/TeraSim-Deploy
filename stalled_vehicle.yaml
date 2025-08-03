@@ -48,8 +48,8 @@ environment:
     warmup_time_lb: 749
     warmup_time_ub: 750
 input:
-  sumo_config_file: examples/bot_map_full/2/simulation.sumocfg
-  sumo_net_file: examples/bot_map_full/2/map.net.xml
+  sumo_config_file: examples/texas_highway_maps/2/simulation.sumocfg
+  sumo_net_file: examples/texas_highway_maps/2/map.net.xml
 logging:
   levels:
   - TRACE

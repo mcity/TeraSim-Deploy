@@ -9,7 +9,7 @@ Usage:
 
 Requirements:
     - SUMO installed with traci support
-    - sumocfg file at: examples/bot_map_full/2/simulation.sumocfg
+    - sumocfg file at: examples/texas_highway_maps/2/simulation.sumocfg
 """
 
 # import traci
@@ -25,7 +25,7 @@ def test_sumo_with_static_vehicle():
     """
     
     # Configuration
-    SUMO_CONFIG = "examples/bot_map_full/2/simulation.sumocfg"
+    SUMO_CONFIG = "examples/texas_highway_maps/2/simulation.sumocfg"
     
     # Problematic coordinates from your yaml config
     TARGET_X = 1090.68
@@ -38,7 +38,7 @@ def test_sumo_with_static_vehicle():
     # Check if config file exists
     if not Path(SUMO_CONFIG).exists():
         print(f"ERROR: SUMO config file not found: {SUMO_CONFIG}")
-        print("Please run this script from the Bot-Auto-Demo directory")
+        print("Please run this script from the TeraSim-Deploy directory")
         return False
     
     try:
@@ -171,7 +171,7 @@ def test_coordinates_validity():
     """
     Test if the coordinates are within the network bounds.
     """
-    SUMO_CONFIG = "examples/bot_map_full/2/simulation.sumocfg"
+    SUMO_CONFIG = "examples/texas_highway_maps/2/simulation.sumocfg"
     TARGET_X = 1089.77
     TARGET_Y = 609.98
     
