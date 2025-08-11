@@ -59,7 +59,7 @@ if __name__ == "__main__":
     config_dir = Path(__file__).parent / "config_yamls" / "config_yaml_with_static"
     # yaml_files = sorted(config_dir.glob("*.yaml"), key=lambda x: int(''.join(filter(str.isdigit, x.stem)) or '0'))
     # yaml_files = ["config_yamls/config_yaml_with_static/config_2_002.yaml"]
-    yaml_files = [Path("stalled_vehicle_disappear_front_vehicle.yaml")]
+    yaml_files = [Path("cutin.yaml")]
     # Randomly shuffle yaml files
     random.shuffle(yaml_files)
 
