@@ -1,4 +1,6 @@
 # TeraSim-Deploy
+> **This repository has been archived.**  
+> Further development continues at [mcity/TeraSim](https://github.com/mcity/TeraSim).
 
 A deployment platform for TeraSim, an autonomous vehicle simulation environment with integrated traffic simulation capabilities.
 
